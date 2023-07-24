@@ -20,23 +20,17 @@ parser.add_argument('--data', '-d', default='/train')
 args = parser.parse_args(args=[])
 
 from google.colab import drive
-#drive.mount('/content/drive')
-path_data='/content/drive/My Drive/Khani/multi_DTI/'
+path_data=' '
 for i in range(5):
-    #load protein-compound interaction dataset
     data = pd.read_csv(path_data+args.input+'/cv_'+str(i)+args.data+'.csv')
 
     #save labels
     label = np.array(data['label'], dtype='int32')
-    #np.save(path_data+args.input+'/cv_'+str(i)+args.data+'_interaction.npy', label)
 
-    #save Ensembl protein ID (ENSP) for applying to node2vec
     with open(path_data+args.input+'/cv_'+str(i)+args.data+'_proIDs.txt', mode='w') as f:
         f.write('\n'.join(data['protein']))
 
-    #save pubchem ID for applying to node2vec
     cid = np.array(data['chemical'], dtype='int32')
-    #np.save(path_data+args.input+'/cv_'+str(i)+args.data+'_chemIDs.npy', cid)
 
     #convert pubchem ID to CanonicalSMILES
     c_id = data.chemical.tolist()
@@ -72,28 +66,21 @@ for i in range(5):
         return X #.tolist()
     #get convert CanonicalSMILES from pubchem chemical ID and convert them to onehot vectors
     file_smiles=pd.read_csv(path_data+'dataset_hard'+'/cv_'+str(i)+'/train.smiles',delimiter='0')
-    #cID = np.load(path_data+'dataset_hard/'+'cv_'+str(i)+'/test_chemIDs.npy')
     """tosmiles = []
     for jj in range(0,cID.shape[0]):
         #cs = get_compounds(cID[jj],'cid')
         #c = Compound.from_cid(cID[jj])
         c = Compound.from_cid(int(cID[jj]))
         tosmiles.append(c.canonical_smiles)  """
-    #tosmiles=np.load('/content/drive/My Drive/Khani/multi_DTI/smiles_'+str(i)+'.npy')  
-    #clen = len(cID)
-    #file_smiles=file_smiles.apply(str)
     smiles_mol=[]
     print('injam')
     print(file_smiles)
     for jj in range(0,len(file_smiles)):
         smiles_mol.append(label_smiles(str(file_smiles.iloc[jj]), 100, smiles_dict))
     smiles_mol.append(label_smiles(str(file_smiles.iloc[jj]), 100, smiles_dict))
-    #np.save('/content/drive/My Drive/Khani/multi_DTI/smiles_mol'+str(i)+'.npy',smiles_mol) 
     np.save('/content/drive/My Drive/Khani/multi_DTI/smiles_mol'+str(i)+'.npy',smiles_mol)#to_categorical(smiles_mol[0:500],70)) 
     
-    #for j in cID:
-        #smiles = jsp.chemical_smiles(j) #get smiles from using pubchemy 
-        #tosmiles.append(smiles)
+
         
     """#smiles = ["#", "%" , ")", "(", "+", "-", "/", "." , "1", "0", "3", "2", "5", "4",
     "7", "6", "9", "8", "=", "A", "@", "C", "B", "E" ,
@@ -141,7 +128,6 @@ for i in range(5):
     from tensorflow.keras.preprocessing.sequence import pad_sequences
     print(len(integer_encoded))
     integer_encoded = pad_sequences(integer_encoded, maxlen=Max_seq)
-    #onehot_tr = to_categorical(integer_encoded[0:500],21)
     """onehot_tr = np.empty((plen, Max_seq, 20), dtype='float32')
     for j in range(len(integer_encoded)):
         b_onehot = np.identity(20, dtype='float32')[integer_encoded[j]]
