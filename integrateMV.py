@@ -1,4 +1,4 @@
-#integrateMV
+#integrating
 import time, argparse, gc, os
 
 import numpy as np
@@ -6,12 +6,8 @@ import cupy as cp
 from cupy import _core
 
 
-from rdkit import Chem
-
-#from feature import *
-#import SCFPfunctions as Mf
+from rdkit import Che
 import pickle
-
 import chainer
 import chainer.functions as F
 import chainer.links as L
@@ -29,22 +25,6 @@ class CNN(chainer.Chain):
 
     def __init__(self, prosize, plensize, batchsize, s1, sa1, s2, sa2, s3, sa3, j1, pf1, ja1, j2, pf2, ja2, j3, pf3, ja3, n_hid3, n_hid4, n_hid5, n_out,
                  atomsize, lensize, k1, st1, f1, k2, st2, k3, st3, f3, k4, st4,k5,st5,f5,k6,st6 ,n_hid, n_out_com ):
-
-        # prosize, plensize_20 = size of protein one hot feature matrix
-        # j1, s1, pf1 = window-size, stride-step, No. of filters of first protein-CNN convolution layer
-        # ja1, sa1 = window-size, stride-step of first protein-CNN average-pooling layer
-        # j2, s2, pf2 = window-size, stride-step, No. of filters of second protein-CNN convolution layer
-        # ja2, sa2 = window-size, stride-step of second protein-CNN average-pooling layer
-        # j3, s3, pf3 = window-size, stride-step, No. of filters of third protein-CNN convolution layer
-        # ja3, sa3 = window-size, stride-step of third protein-CNN average-pooling layer
-        
-        # atomsize, lenseize = size of feature matrix
-        # k1, st1, f1 = window-size, stride-step, No. of filters of first convolution layer
-        # k2, st2 = window-size, stride-step of first max-pooling layer
-        # k3, st3, f3 = window-size, stride-step, No. of filters of second convolution layer
-        # k4, st4 = window-size, stride-step of second max-pooling layer
-        # k5,st5,f5 = window-size, stride-step, No. of filters of third convolutinal layer
-        # k6,st6 = window-size, stride-step of third max-pooling layer
 
         super(CNN, self).__init__(
             conv1_pro=L.Convolution2D(pf1, (j1, plensize), stride=s1, pad = (j1//2,0)),
@@ -107,12 +87,8 @@ class CNN(chainer.Chain):
         z = self.cos_similarity(smiles, sequences, n2vc, n2vp)
         ZZ = self.fc6_z(z)
         print('type0')
-        #print(type(Z))
         print(type(interactions))
         loss = F.sigmoid_cross_entropy(ZZ, interactions.transpose)#F.get_item(interactions.transpose,None), F.get_item(Z,None) )
-        #accuracy = F.binary_accuracy(Z, interactions.transpose)
-        #report({'loss': loss, 'accuracy': accuracy}, self)
-        #loss = 1.
         return loss
         
     
@@ -124,9 +100,7 @@ class CNN(chainer.Chain):
         h = F.dropout(F.leaky_relu(self.bn3_pro(self.conv3_pro(h))), ratio=0.2) # 3rd conv
         h = F.average_pooling_2d(h, (self.ja3,1), stride=self.sa3, pad=(self.ja3//2,0)) # 3rd pooling
         h_pro = F.max_pooling_2d(h, (self.m6,1)) # grobal max pooling, fingerprint
-        #print(h_pro.shape)
         h_pro = F.dropout(F.leaky_relu(self.fc3_pro(h_pro)), ratio=0.2)# fully connected_1
-        #print(h_pro.shape)
         return self.fc5_pro(h_pro)
     
    
@@ -151,14 +125,11 @@ class CNN(chainer.Chain):
         print('similarity')
         print(x_compound)
         print(n2c.shape)
-        #x_compound = self.fc_concat_com(F.concat((x_compound[0], n2c)))
         x_compound = F.dropout(F.leaky_relu(x_compound), ratio=0.2)
         x_compound = F.dropout(F.leaky_relu(self.fc7(x_compound)), ratio=0.2)
-        #x_protein = self.fc_concat_pro(F.concat((x_protein, n2p)))
         x_protein = F.dropout(F.leaky_relu(x_protein), ratio=0.2)
         x_protein = F.dropout(F.leaky_relu(self.fc7_pro(x_protein)), ratio=0.2)
-        #print(x_protein.shape)
-        #print(x_compound.shape)
+       
 
         y = x_compound * x_protein
 
