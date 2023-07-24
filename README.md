@@ -5,6 +5,8 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
+- [Technologies Used](#technologies-used)
+
 
 ## Project Description
 
