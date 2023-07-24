@@ -9,8 +9,8 @@ import sys
 sys.path.insert(0,' ')
 
 import sys
-sys.path.append('/integrateMV.py')
-sys.path.insert(0,'/integrateMV.py')
+sys.path.append('/integrating.py')
+sys.path.insert(0,'/integrating.py')
 import pickle
 import time, argparse, gc, os
 import cupy as cp
@@ -176,7 +176,7 @@ for j in range(5):
 
         file_sequences=xp.load(path_data+'dataset_hard'+'/cv_'+str(kfold[i])+'/train_reprotein.npy')
         print('Loading sequences: train_reprotein.npy', flush=True)
-        sequences = xp.asarray(file_sequences, dtype='float32')#.reshape(-1,1,args.prosize,plensize)
+        sequences = xp.asarray(file_sequences, dtype='float32')
         # reset memory
         del file_smiles
         gc.collect()
