@@ -55,10 +55,12 @@ DeepCompoundNet offers the following features:
 - Efficient virtual screening of compound-protein interactions not observed in the training samples.
 
 ## Technologies Used
-Python 
-TensorFlow
-Pandas 
-NumPy
-Matplotlib 
+
+
+- Python 
+- TensorFlow
+- Pandas 
+- NumPy
+- Matplotlib 
 
 Thank you for your interest in DeepCompoundNet! We hope this model will be helpful in your compound-protein interaction prediction tasks. If you have any questions or feedback, please don't hesitate to contact us. Happy predicting!
