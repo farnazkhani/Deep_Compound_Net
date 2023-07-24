@@ -29,11 +29,9 @@ To use DeepCompoundNet, follow these steps:
 
 ## Usage
 
-To predict compound-protein interactions using DeepCompoundNet, you need to import the provided module and use it in your Python code. Here's an example of how to use the model:
+To predict compound-protein interactions using DeepCompoundNet, you need to import the code and use it in your Python code. Here's an example of how to use the model:
 
 ```python
-import deepcompoundnet
-
 # Load your compound and protein data
 compound_data = load_compound_data('path/to/compound_data.csv')
 protein_data = load_protein_data('path/to/protein_data.csv')
