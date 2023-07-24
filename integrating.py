@@ -1,4 +1,4 @@
-#integratin
+#integrating
 import time, argparse, gc, os
 
 import numpy as np
